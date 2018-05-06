@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using ProductsWebService.Database.Entities;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using ProductsWebService.Database.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace ProductsWebService.Database
 {
@@ -20,7 +18,8 @@ namespace ProductsWebService.Database
         private void InitMockDB()
         {
             _dbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE Products");
-            _dbContext.Products.Add(new Product() { Id = Guid.NewGuid().ToString(), Name = "prod 1", Description = "", Price = 9.99m, ImgUri = "uri" });
+            _dbContext.Products.Add(new Product() { Id = "0d62fd12-7ce3-4b7f-84cb-b12a417786a2", Name = "product 1", Description = "", Price = 9.99m, ImgUri = "uri" });
+            _dbContext.Products.Add(new Product() { Id = "a7c7c58c-c9ae-4179-b278-d702f9c7533d", Name = "product 2", Description = "", Price = 99.99m, ImgUri = "uri" });
             _dbContext.SaveChanges();
         }
 

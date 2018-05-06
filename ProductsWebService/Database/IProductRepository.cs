@@ -1,8 +1,5 @@
-﻿using System;
+﻿using ProductsWebService.Database.Entities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ProductsWebService.Database.Entities;
 
 namespace ProductsWebService.Database
 {
