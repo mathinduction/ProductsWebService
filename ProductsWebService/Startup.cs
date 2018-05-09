@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProductsWebService.Database;
-using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Swagger;
+using System.Reflection;
+using System;
 
 namespace ProductsWebService
 {
@@ -30,8 +32,13 @@ namespace ProductsWebService
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "Product Service API", Version = "v1" });
+                var xmlFile = $"{Assembly.GetEntryAssembly().GetName().Name}.xml";
+                var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
             services.AddDbContext<MockProductDBContext>();
+
+            //change this line to use real Repository
             services.AddScoped<IProductRepository, MockProductRepository>();
         }
 
