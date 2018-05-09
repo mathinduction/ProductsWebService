@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ProductsWebService.Tests
 {
@@ -21,7 +22,8 @@ namespace ProductsWebService.Tests
             expectedProducts.Add(new Product() { Id = "0d62fd12-7ce3-4b7f-84cb-b12a417786a2", Name = "product 1", Description = "", Price = 9.99m, ImgUri = "uri" });
             expectedProducts.Add(new Product() { Id = "a7c7c58c-c9ae-4179-b278-d702f9c7533d", Name = "product 2", Description = "", Price = 99.99m, ImgUri = "uri" });
 
-            var products = controller.Get();
+            var result = controller.Get() as ObjectResult;
+            var products = result?.Value as IEnumerable<Product>;
 
             Assert.NotNull(products);
             Assert.True(expectedProducts.SequenceEqual(products));
@@ -37,7 +39,8 @@ namespace ProductsWebService.Tests
             var id = "0d62fd12-7ce3-4b7f-84cb-b12a417786a2";
             var expectedProduct = new Product() { Id = id, Name = "product 1", Description = "", Price = 9.99m, ImgUri = "uri" };
 
-            var product = controller.Get(id);
+            var result = controller.Get(id) as ObjectResult;
+            var product = result?.Value as Product;
 
             Assert.NotNull(product);
             Assert.Equal(expectedProduct, product);
@@ -50,9 +53,10 @@ namespace ProductsWebService.Tests
             var repository = new MockProductRepository(db);
             var controller = new ProductsController(repository);
 
-            var product = controller.Get("0");
+            var result = controller.Get("0") as NotFoundResult;
 
-            Assert.Null(product);
+            Assert.NotNull(result);
+            Assert.Equal(404, result.StatusCode);
         }
 
         [Fact]
@@ -66,7 +70,8 @@ namespace ProductsWebService.Tests
             var productToPost = new Product() { Id = id, Name = "product 3", Description = "", Price = 1.00m, ImgUri = "uri" };
 
             controller.Post(productToPost);
-            var product = controller.Get(id);
+            var result = controller.Get(id) as ObjectResult;
+            var product = result?.Value as Product;
 
             Assert.NotNull(product);
             Assert.Equal(productToPost, product);
@@ -83,7 +88,8 @@ namespace ProductsWebService.Tests
             var productToPost = new Product() { Id = id, Name = "product 11", Description = "new description", Price = 11.00m, ImgUri = "new uri" };
 
             controller.Post(productToPost);
-            var product = controller.Get(id);
+            var result = controller.Get(id) as ObjectResult;
+            var product = result?.Value as Product;
 
             Assert.NotNull(product);
             Assert.Equal(productToPost, product);

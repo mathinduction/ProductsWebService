@@ -2,6 +2,7 @@
 using ProductsWebService.Database;
 using ProductsWebService.Database.Entities;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ProductsWebService.Controllers
 {
@@ -16,21 +17,34 @@ namespace ProductsWebService.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Product> Get()
+        public IActionResult Get()
         {
-            return _productRepository.GetAllProducts();
+            var products = _productRepository.GetAllProducts();
+            if (products == null || products.Count() == 0)
+                return NotFound();
+            return Ok(products);
         }
 
         [HttpGet("{id}")]
-        public Product Get(string id)
+        public IActionResult Get(string id)
         {
-            return _productRepository.GetProduct(id);
+            if (string.IsNullOrEmpty(id))
+                return BadRequest();
+
+            var product = _productRepository.GetProduct(id);
+            if (product == null)
+                return NotFound();
+            return Ok(product);
         }
 
         [HttpPost]
-        public void Post([FromBody]Product value)
+        public IActionResult Post([FromBody]Product value)
         {
+            if (value == null)
+                return BadRequest();
+
             _productRepository.SaveProduct(value);
+            return Ok();
         }
     }
 }
