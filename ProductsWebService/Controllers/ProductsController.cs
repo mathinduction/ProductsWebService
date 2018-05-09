@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProductsWebService.Database;
 using ProductsWebService.Database.Entities;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace ProductsWebService.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class ProductsController : Controller
     {
         private IProductRepository _productRepository;
